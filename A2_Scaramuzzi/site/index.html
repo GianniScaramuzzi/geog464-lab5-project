@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building Roofs Near Greenspace | Montréal</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">MONTRÉAL · LAND-USE EXPLORER</p>
+      <h1>Building roofs near greenspace</h1>
+      <p class="intro">Explore mapped building roof outlines inside economic-activity zones and compare their distance to local green spaces, including outlines within 100 metres.</p>
+    </div>
+    <div class="headline-stat" aria-live="polite">
+      <strong id="headline-count">Loading…</strong>
+      <span>roof outlines within 100 m</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary" aria-label="Project overview">
+      <article class="stat-card">
+        <span class="stat-number" id="total-count">—</span>
+        <span class="stat-label">Roof outlines in economic zones</span>
+      </article>
+      <article class="stat-card stat-green">
+        <span class="stat-number" id="within-100-count">—</span>
+        <span class="stat-label">Roof outlines within 100 m</span>
+      </article>
+      <article class="stat-card stat-mid">
+        <span class="stat-number" id="between-100-500-count">—</span>
+        <span class="stat-label">Roof outlines 100–500 m</span>
+      </article>
+      <article class="stat-card stat-muted">
+        <span class="stat-number" id="over-500-count">—</span>
+        <span class="stat-label">Roof outlines over 500 m</span>
+      </article>
+    </section>
+
+    <section class="map-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">01 / EXPLORE</p>
+          <h2>Explore building roof outlines</h2>
+        </div>
+        <p class="section-note">Use the layer selector to compare mapped roof outlines, greenspaces, and broad planning zones. Click an outline for its distance and zone overlap.</p>
+      </div>
+      <div class="map-key" aria-label="Map legend">
+        <strong class="map-key-title">Distance to mapped greenspace (m)</strong>
+        <span><i class="swatch economic"></i> 0–100</span>
+        <span><i class="swatch mid"></i> &gt;100–500</span>
+        <span><i class="swatch outside"></i> &gt;500</span>
+        <span><i class="swatch green"></i> Local greenspace</span>
+      </div>
+      <div id="map" role="region" aria-label="Interactive map of Montréal roof outlines and green spaces"></div>
+      <p id="status" class="status" aria-live="polite">Loading map data…</p>
+    </section>
+
+    <section class="explanation">
+      <div>
+        <p class="section-kicker">02 / INTERPRET</p>
+        <h2>How are buildings selected?</h2>
+        <p>Each outline is roof geometry from Montréal's 2016 building dataset. A roof is included when at least half of its mapped area overlaps an economic-activity planning zone. Its distance is measured from the roof outline to the nearest mapped local greenspace. The map separates outlines within 100 metres, over 100 through 500 metres, and over 500 metres. Some adjacent roof surfaces may be grouped, so mapped features are not guaranteed to correspond one-to-one with buildings. They are not property boundaries, business locations, or evidence that a building is vacant. The source is from 2016, so later construction or changes may be missing.</p>
+      </div>
+      <aside class="result-callout">
+        <span class="callout-number" id="near-ratio">—</span>
+        <p>of the selected roof outlines are within 100 m of mapped greenspace.</p>
+      </aside>
+    </section>
+
+    <section class="limits">
+      <p class="section-kicker">03 / SCOPE</p>
+      <h2>What this map can—and cannot—tell us</h2>
+      <p>This map identifies mapped roof outlines located mostly within designated economic-activity zones and shows their distance to mapped greenspaces. The outlines may group adjacent roof surfaces and do not identify businesses, property lots, ownership, vacancy, public access, or suitability for rehabilitation. The source data dates to 2016, and the zone-overlap threshold is a screening rule. Verify current conditions and property boundaries with more recent authoritative data before making site-level decisions.</p>
+    </section>
+
+    <footer>
+      <h2>Data and sources</h2>
+      <p>Land-use data: <a href="https://donnees.montreal.ca/dataset/niveaux-intensification-urbaine-densite-affectation-sol-pum-2050" target="_blank" rel="noreferrer">Ville de Montréal — PUM 2050, intensification, density and land use</a>.</p>
+      <p>Building roof outlines: <a href="https://donnees.montreal.ca/dataset/batiment-2d" target="_blank" rel="noreferrer">Ville de Montréal — Bâtiments 2D 2016</a> (CC BY 4.0; dataset updated irregularly, mapped vintage 2016).</p>
+      <p>Greenspace data: Ville de Montréal local green-space dataset supplied with this project. Confirm and add its official source URL and licence before submission.</p>
+      <p>Basemap: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>.</p>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

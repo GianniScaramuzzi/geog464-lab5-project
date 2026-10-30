@@ -1,0 +1,67 @@
+* { box-sizing: border-box; }
+:root {
+  --navy: #1f315b;
+  --ink: #1e293b;
+  --muted: #596579;
+  --line: #dce3eb;
+  --paper: #f6f8fb;
+  --orange: #e99535;
+  --green: #27834f;
+  --gray: #64748b;
+}
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--paper); line-height: 1.55; }
+.hero { background: var(--navy); color: white; padding: 28px clamp(18px, 4vw, 56px); display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 4px solid #e8bd27; }
+.hero-copy { max-width: 800px; }
+.eyebrow, .section-kicker { margin: 0 0 7px; font-size: 11px; font-weight: 700; letter-spacing: .13em; }
+.eyebrow { color: #f3cd48; }
+h1 { margin: 0; font-size: clamp(27px, 3vw, 40px); line-height: 1.12; }
+.intro { max-width: 700px; margin: 12px 0 0; color: #e6ebf5; font-size: 16px; }
+.headline-stat { min-width: 180px; padding: 15px 18px; border: 1px solid #607198; border-radius: 12px; background: #293e6b; }
+.headline-stat strong, .headline-stat span { display: block; }
+.headline-stat strong { font-size: 25px; color: #f3cd48; line-height: 1.2; }
+.headline-stat span { margin-top: 5px; font-size: 12px; color: #edf1f8; }
+main { max-width: 1440px; margin: 0 auto; padding: 24px clamp(14px, 3vw, 38px) 36px; }
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 32px; }
+.stat-card { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; }
+.stat-number { font-size: 29px; font-weight: 750; color: var(--navy); line-height: 1.2; }
+.stat-green .stat-number { color: var(--green); }
+.stat-mid .stat-number { color: #8a6a22; }
+.stat-muted .stat-number { color: var(--gray); }
+.stat-label { margin-top: 5px; color: var(--muted); font-size: 13px; }
+.map-section, .explanation, .limits { margin-bottom: 34px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 12px; }
+.section-kicker { color: #68758b; }
+h2 { margin: 0; font-size: clamp(21px, 2vw, 27px); line-height: 1.25; }
+.section-note { max-width: 430px; margin: 0; color: var(--muted); font-size: 13px; }
+.map-key { display: flex; flex-wrap: wrap; gap: 10px 20px; background: white; border: 1px solid var(--line); border-bottom: 0; border-radius: 10px 10px 0 0; padding: 12px 15px; font-size: 12px; color: #344054; }
+.map-key-title { flex-basis: 100%; }
+.map-key span { display: inline-flex; align-items: center; gap: 7px; }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.2); }
+.swatch.economic { background: var(--orange); }
+.swatch.mid { background: #f1cb73; }
+.swatch.outside { background: var(--gray); }
+.swatch.green { background: var(--green); }
+#map { height: min(68vh, 650px); min-height: 400px; width: 100%; background: #e9eef2; border: 1px solid var(--line); border-radius: 0 0 10px 10px; z-index: 1; }
+.status { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.leaflet-popup-content { line-height: 1.55; }
+.leaflet-control-layers { border-radius: 8px !important; }
+.explanation { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(220px, .8fr); gap: 24px; align-items: stretch; }
+.explanation > div, .result-callout, .limits, footer { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; }
+.explanation p:not(.section-kicker), .limits > p:not(.section-kicker), footer p { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+.result-callout { display: flex; flex-direction: column; justify-content: center; background: #edf7f0; border-color: #cbe6d2; }
+.callout-number { color: var(--green); font-weight: 800; font-size: 32px; line-height: 1.1; }
+.result-callout p { color: #285b3b !important; }
+.limits { margin-bottom: 24px; }
+footer { font-size: 13px; }
+footer h2 { font-size: 18px; }
+footer p + p { margin-top: 7px; }
+a { color: #2257a5; }
+@media (max-width: 720px) {
+  .hero { align-items: stretch; flex-direction: column; }
+  .headline-stat { width: 100%; }
+  .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .stat-card { padding: 12px 15px; }
+  .section-heading { align-items: start; flex-direction: column; gap: 8px; }
+  .explanation { grid-template-columns: 1fr; }
+  #map { height: 62vh; min-height: 360px; }
+}
