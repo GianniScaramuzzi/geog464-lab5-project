@@ -65,3 +65,24 @@ a { color: #2257a5; }
   .explanation { grid-template-columns: 1fr; }
   #map { height: 62vh; min-height: 360px; }
 }
+.distance-filter {
+  margin: 16px 0;
+  padding: 16px;
+  background: #f5f1e9;
+  border-radius: 8px;
+}
+
+.distance-filter label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.distance-filter input {
+  width: 100%;
+  cursor: pointer;
+}
+
+#filter-count {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}

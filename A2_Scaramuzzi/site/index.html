@@ -55,6 +55,25 @@
         <span><i class="swatch outside"></i> &gt;500</span>
         <span><i class="swatch green"></i> Local greenspace</span>
       </div>
+      <div class="distance-filter">
+  <label for="distance-slider">
+    Maximum distance to greenspace:
+    <strong id="distance-value">100 m</strong>
+  </label>
+
+  <input
+    type="range"
+    id="distance-slider"
+    min="0"
+    max="1000"
+    step="50"
+    value="100"
+  />
+
+  <p id="filter-count" aria-live="polite">
+    Showing roof outlines within 100 m.
+  </p>
+</div>
       <div id="map" role="region" aria-label="Interactive map of Montréal roof outlines and green spaces"></div>
       <p id="status" class="status" aria-live="polite">Loading map data…</p>
     </section>

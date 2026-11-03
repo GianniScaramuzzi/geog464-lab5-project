@@ -27,10 +27,16 @@ Test 1. I set the maximum distance to 100 m.
 Expected: Only roof outlines within 100 m of
 greenspace are displayed, and the count updates.
 
+Result: PASSED — The map displayed only roof outlines within 100 m, and the count updated correctly.
+
 Test 2. I increase the maximum distance to 500 m.
 Expected: More matching roof outlines appear
 and the count updates accordingly.
 
+Result: PASSED — Increasing the maximum distance to 500 m displayed more matching roof outlines, and the count updated correctly.
+
 Test 3. I set the maximum distance to 0 m.
 Expected: Only outlines at 0 m are displayed.
 If none match, a clear no-results message appears.
+
+Result: PASSED — No roof outlines matched the 0 m distance filter. The map displayed no building outlines and showed a clear no-results message.

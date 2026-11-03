@@ -58,50 +58,46 @@ Promise.all([
     return feature.properties.greenspace_distance_m > 500;
   });
 
-  const within100mLayer = L.geoJSON({
-    type: 'FeatureCollection',
-    features: within100m
-  }, {
-    style: { color: '#9a4c0b', fillColor: '#e99535', fillOpacity: 0.3, weight: 1 },
-    onEachFeature: function (feature, layer) {
-      const p = feature.properties;
-      layer.bindPopup('<strong>Building roof outline (2016)</strong>' +
-        '<br>Roof area: ' + safeText(p.roof_area_m2) + ' m²' +
-        '<br>Distance to mapped greenspace: ' + safeText(p.greenspace_distance_m) + ' m' +
-        '<br>Overlap with economic planning zone: ' +
-        safeText(p.economic_zone_overlap_percent) + '%');
-    }
-  });
+  const filteredBuildingsLayer = L.geoJSON({
+  type: 'FeatureCollection',
+  features: []
+}, {
+  style: function (feature) {
+    const distance = feature.properties.greenspace_distance_m;
 
-  const between100and500mLayer = L.geoJSON({
-    type: 'FeatureCollection',
-    features: between100and500m
-  }, {
-    style: { color: '#8a6a22', fillColor: '#f1cb73', fillOpacity: 0.24, weight: 0.8 },
-    onEachFeature: function (feature, layer) {
-        const p = feature.properties;
-        layer.bindPopup('<strong>Building roof outline (2016)</strong>' +
-          '<br>Roof area: ' + safeText(p.roof_area_m2) + ' m²' +
-          '<br>Distance to mapped greenspace: ' + safeText(p.greenspace_distance_m) + ' m' +
-          '<br>Overlap with economic planning zone: ' +
-          safeText(p.economic_zone_overlap_percent) + '%');
+    if (distance <= 100) {
+      return {
+        color: '#9a4c0b',
+        fillColor: '#e99535',
+        fillOpacity: 0.3,
+        weight: 1
+      };
+    } else if (distance <= 500) {
+      return {
+        color: '#8a6a22',
+        fillColor: '#f1cb73',
+        fillOpacity: 0.24,
+        weight: 0.8
+      };
+    } else {
+      return {
+        color: '#475569',
+        fillColor: '#94a3b8',
+        fillOpacity: 0.12,
+        weight: 0.7
+      };
     }
-  });
+  },
+  onEachFeature: function (feature, layer) {
+    const p = feature.properties;
 
-  const over500mLayer = L.geoJSON({
-    type: 'FeatureCollection',
-    features: over500m
-  }, {
-    style: { color: '#475569', fillColor: '#94a3b8', fillOpacity: 0.12, weight: 0.7 },
-    onEachFeature: function (feature, layer) {
-      const p = feature.properties;
-      layer.bindPopup('<strong>Building roof outline (2016)</strong>' +
-        '<br>Roof area: ' + safeText(p.roof_area_m2) + ' m²' +
-        '<br>Distance to mapped greenspace: ' + safeText(p.greenspace_distance_m) + ' m' +
-        '<br>Overlap with economic planning zone: ' +
-        safeText(p.economic_zone_overlap_percent) + '%');
-    }
-  });
+    layer.bindPopup('<strong>Building roof outline (2016)</strong>' +
+      '<br>Roof area: ' + safeText(p.roof_area_m2) + ' m²' +
+      '<br>Distance to mapped greenspace: ' + safeText(p.greenspace_distance_m) + ' m' +
+      '<br>Overlap with economic planning zone: ' +
+      safeText(p.economic_zone_overlap_percent) + '%');
+  }
+});
 
   const economicZoneLayer = L.geoJSON(allEconomic, {
     style: { color: '#334155', fillColor: '#94a3b8', fillOpacity: 0, weight: 1, dashArray: '4 3' },
@@ -125,28 +121,74 @@ Promise.all([
     }
   });
 
-  within100mLayer.addTo(map);
+   // Add the filtered building layer and greenspaces to the map.
+  filteredBuildingsLayer.addTo(map);
   greenLayer.addTo(map);
 
+  // Layer selector.
   L.control.layers(null, {
-    ['Roof outlines within 100 m (' + within100m.length + ')']: within100mLayer,
-    ['Roof outlines 100–500 m (' + between100and500m.length + ')']: between100and500mLayer,
-    ['Roof outlines over 500 m (' + over500m.length + ')']: over500mLayer,
+    'Filtered building roof outlines': filteredBuildingsLayer,
     'Economic planning zones (context)': economicZoneLayer,
     'Local green spaces': greenLayer
   }, { collapsed: false }).addTo(map);
 
-  const bounds = L.geoJSON(buildings).getBounds();
-  if (bounds.isValid()) map.fitBounds(bounds, { padding: [20, 20] });
-
+  // Update the original summary statistics.
   document.getElementById('total-count').textContent = buildings.features.length;
   document.getElementById('within-100-count').textContent = within100m.length;
   document.getElementById('between-100-500-count').textContent = between100and500m.length;
   document.getElementById('over-500-count').textContent = over500m.length;
-  document.getElementById('headline-count').textContent =
-    within100m.length + ' of ' + buildings.features.length;
+
   document.getElementById('near-ratio').textContent =
     within100m.length + ' / ' + buildings.features.length;
+
+  // Connect the distance slider to the building layer.
+  const distanceSlider = document.getElementById('distance-slider');
+  const distanceValue = document.getElementById('distance-value');
+  const filterCount = document.getElementById('filter-count');
+  const headlineCount = document.getElementById('headline-count');
+
+  function updateDistanceFilter() {
+    const maxDistance = Number(distanceSlider.value);
+
+    const matchingBuildings = buildings.features.filter(function (feature) {
+      return Number(feature.properties.greenspace_distance_m) <= maxDistance;
+    });
+
+    filteredBuildingsLayer.clearLayers();
+
+    filteredBuildingsLayer.addData({
+      type: 'FeatureCollection',
+      features: matchingBuildings
+    });
+
+    distanceValue.textContent = maxDistance + ' m';
+
+    filterCount.textContent =
+      'Showing ' + matchingBuildings.length + ' of ' +
+      buildings.features.length + ' roof outlines within ' +
+      maxDistance + ' m of mapped greenspace.';
+
+    headlineCount.textContent =
+      matchingBuildings.length + ' of ' + buildings.features.length;
+
+    if (matchingBuildings.length === 0) {
+      filterCount.textContent =
+        'No roof outlines found within ' + maxDistance + ' m of mapped greenspace.';
+    }
+  }
+
+  distanceSlider.addEventListener('input', updateDistanceFilter);
+
+  // Apply the initial slider value.
+updateDistanceFilter();
+
+// Set the map view to the building data.
+const bounds = L.geoJSON(buildings).getBounds();
+
+if (bounds.isValid()) {
+  map.fitBounds(bounds, { padding: [20, 20] });
+}
+
   document.getElementById('status').textContent =
     'Loaded ' + buildings.features.length + ' building roof outlines from 2016, filtered by overlap with ' +
     allEconomic.features.length + ' economic planning zones, and ' +
